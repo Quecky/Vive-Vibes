@@ -17,5 +17,6 @@ import { CategoryMysqlRepository } from './infrastructure/persistence/category.m
       useClass: CategoryMysqlRepository,
     },
   ],
+  exports: [CategoryService],
 })
 export class CategoryModule {}

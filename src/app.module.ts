@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { AppService } from './app.service';
 import { TourModule } from './modules/tour/tour.module';
-import { CategoriesModule } from './modules/categories/categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { dataSourceOptions } from '@configuration/orm.configuration';
@@ -28,10 +26,9 @@ import { CategoryModule } from './modules/category/category.module';
       },
     }),
     TourModule,
-    CategoriesModule,
     CategoryModule,
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}

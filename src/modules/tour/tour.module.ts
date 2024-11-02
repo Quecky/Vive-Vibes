@@ -6,9 +6,14 @@ import { TourEntity } from './infrastructure/persistence/entities/tour.entity';
 import { CommonModule } from '@/common/common.module';
 import { TOUR_REPOSITORY } from './application/repository/tour.repository';
 import { TourMySQLRepository } from './infrastructure/persistence/tour.myslq.repository';
+import { CategoryModule } from '../category/category.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TourEntity]), CommonModule],
+  imports: [
+    TypeOrmModule.forFeature([TourEntity]),
+    CommonModule,
+    CategoryModule,
+  ],
   controllers: [TourController],
   providers: [
     TourService,
