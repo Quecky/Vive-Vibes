@@ -1,12 +1,14 @@
+import { CategoryEntity } from '@/modules/category/infrastructure/persistence/entities/category.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
-@Entity()
+@Entity('tour')
 export class TourEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,4 +30,7 @@ export class TourEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => CategoryEntity, (category) => category.tours)
+  category: CategoryEntity;
 }

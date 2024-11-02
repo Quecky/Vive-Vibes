@@ -9,6 +9,7 @@ import { dataSourceOptions } from '@configuration/orm.configuration';
 import { configuration } from '@configuration/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { configurationValidate } from '@configuration/configuration.validate';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { configurationValidate } from '@configuration/configuration.validate';
     }),
     TourModule,
     CategoriesModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [AppService],
