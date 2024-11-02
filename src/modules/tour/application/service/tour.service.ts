@@ -7,19 +7,25 @@ import { MapperService } from '@common/application/mapper/mapper.service';
 import { CreateTourDto } from '../dto/create-tour.dto';
 import { Tour } from '../../domain/tour.domain';
 import { UpdateTourDto } from '../dto/update-tour.dto';
+import { CategoryService } from '@/modules/category/application/service/category.service';
 
 @Injectable()
 export class TourService {
   constructor(
     @Inject(TOUR_REPOSITORY) private readonly tourRepository: ITourRepository,
+    private readonly categoryService: CategoryService,
     private readonly mapperService: MapperService,
   ) {}
 
   async create(createTourDto: CreateTourDto) {
+    const category = await this.categoryService.finById(
+      createTourDto.categoryId,
+    );
     const newTour: Tour = this.mapperService.dtoToClass(
       createTourDto,
       new Tour(),
     );
+    newTour.category = category;
     const response = await this.tourRepository.create(newTour);
     return response;
   }

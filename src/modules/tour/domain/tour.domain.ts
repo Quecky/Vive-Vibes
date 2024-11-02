@@ -1,3 +1,4 @@
+import { Category } from '@/modules/category/domain/category.domain';
 import { Base } from 'src/common/domain/base.domain';
 
 export class Tour extends Base {
@@ -6,4 +7,5 @@ export class Tour extends Base {
   description: string;
   image: string;
   spots: number;
+  category: Category;
 }

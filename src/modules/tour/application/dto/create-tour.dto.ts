@@ -4,4 +4,5 @@ export class CreateTourDto {
   description: string;
   image: string;
   spots: number;
+  categoryId: number;
 }
