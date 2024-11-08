@@ -1,4 +1,22 @@
 {
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "printWidth": 80,
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^@configuration/(.*)$",
+    "^@common/(.*)$",
+    "^@modules/(.*)$",
+    "^@/(.*)$",
+    "^@root/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": [
+    "typescript",
+    "classProperties",
+    "[\"decorators-legacy\", { \"decoratorsBeforeExport\": true }]"
+  ]
 }
