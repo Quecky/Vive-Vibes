@@ -1,4 +1,5 @@
 import { CategoryEntity } from '@/modules/category/infrastructure/persistence/entities/category.entity';
+import { CharacteristicEntity } from '@/modules/characteristics/infrastructure/persistence/entities/characteristic.entity';
 import {
   Column,
   Entity,
@@ -6,6 +7,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity('tour')
@@ -14,16 +17,49 @@ export class TourEntity {
   id: number;
 
   @Column()
-  title: string;
+  nombre: string;
 
   @Column()
-  description: string;
+  descripcion: string;
 
   @Column()
-  image: string;
+  recomendaciones: string;
 
   @Column()
-  spots: number;
+  imagen: string;
+
+  @Column({ type: 'time' })
+  tiempoEstimado: string;
+
+  @Column()
+  pais: string;
+
+  @Column()
+  ciudad: string;
+
+  @Column()
+  aptoParaNinos: boolean;
+
+  @Column()
+  fechaExperiencia: Date;
+
+  @Column({ type: 'time' })
+  horaInicio: string;
+
+  @Column({ type: 'time' })
+  horaFin: string;
+
+  @Column()
+  valor: number;
+
+  @Column()
+  cupos: number;
+
+  @Column()
+  userId: number;
+
+  @Column()
+  categoryId: number;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -33,4 +69,15 @@ export class TourEntity {
 
   @ManyToOne(() => CategoryEntity, (category) => category.tours)
   category: CategoryEntity;
+
+  @ManyToMany(() => CharacteristicEntity)
+  @JoinTable({
+    name: 'tour_characteristic',
+    joinColumn: { name: 'tour_id', referencedColumnName: 'id' },
+    inverseJoinColumn: {
+      name: 'characteristic_id',
+      referencedColumnName: 'id',
+    },
+  })
+  tours: CharacteristicEntity[];
 }

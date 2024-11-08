@@ -7,7 +7,8 @@ import { dataSourceOptions } from '@configuration/orm.configuration';
 import { configuration } from '@configuration/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { configurationValidate } from '@configuration/configuration.validate';
-import { CategoryModule } from './modules/category/category.module';
+import { CategoryModule } from '@modules/category/category.module';
+import { CharacteristicsModule } from '@modules/characteristics/characteristics.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CategoryModule } from './modules/category/category.module';
     }),
     TourModule,
     CategoryModule,
+    CharacteristicsModule,
   ],
   controllers: [],
   providers: [],
