@@ -22,7 +22,7 @@ export class TourMySQLRepository implements ITourRepository {
   async findById(id: number): Promise<Tour> {
     const tourEntity = await this.tourRepository.findOne({
       where: { id },
-      relations: ['category'],
+      relations: ['category', 'characteristics'],
     });
     if (!tourEntity) throw new BadRequestException('Tour not Found');
 

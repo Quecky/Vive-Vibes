@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateTourDto {
   @ApiProperty()
@@ -31,9 +37,11 @@ export class CreateTourDto {
   city: string;
 
   @ApiProperty()
+  @IsBoolean()
   suitableForChildren: boolean;
 
   @ApiProperty()
+  @IsDateString()
   experienceDate: Date;
 
   @ApiProperty()
@@ -52,10 +60,10 @@ export class CreateTourDto {
   @IsNumber()
   slots: number;
 
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
-  userId: number;
+  // @ApiProperty()
+  // @IsOptional()
+  // @IsNumber()
+  // userId: number;
 
   @ApiProperty()
   @IsOptional()

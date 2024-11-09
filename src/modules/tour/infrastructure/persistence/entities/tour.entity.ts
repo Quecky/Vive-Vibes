@@ -55,8 +55,8 @@ export class TourEntity {
   @Column()
   slots: number;
 
-  @Column()
-  userId: number;
+  // @Column()
+  // userId: number;
 
   @Column()
   categoryId: number;
@@ -79,5 +79,5 @@ export class TourEntity {
       referencedColumnName: 'id',
     },
   })
-  tours: CharacteristicEntity[];
+  characteristics: CharacteristicEntity[];
 }

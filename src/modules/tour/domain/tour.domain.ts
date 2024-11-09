@@ -1,4 +1,5 @@
 import { Category } from '@/modules/category/domain/category.domain';
+import { Characteristic } from '@/modules/characteristics/domain/characteristic.domain';
 import { Base } from 'src/common/domain/base.domain';
 
 export class Tour extends Base {
@@ -15,7 +16,8 @@ export class Tour extends Base {
   endTime: string;
   price: number;
   slots: number;
-  userId: number;
+  // userId: number;
   categoryId: number;
   category: Category;
+  characteristics: Characteristic[];
 }
