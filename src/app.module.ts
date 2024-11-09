@@ -8,6 +8,7 @@ import { configuration } from '@configuration/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { configurationValidate } from '@configuration/configuration.validate';
 import { CategoryModule } from './modules/category/category.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CategoryModule } from './modules/category/category.module';
     }),
     TourModule,
     CategoryModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
