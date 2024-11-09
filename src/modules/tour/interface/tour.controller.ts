@@ -38,7 +38,15 @@ export class TourController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  delete(@Param('id') id: string) {
     return this.tourService.delete(+id);
+  }
+
+  @Delete(':tourId/characteristic/:characteristicId')
+  deleteCharacteristic(
+    @Param('tourId') tourId: string,
+    @Param('characteristicId') characteristicId: string,
+  ) {
+    return this.tourService.deleteCharacteristic(+tourId, +characteristicId);
   }
 }

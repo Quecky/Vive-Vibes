@@ -13,6 +13,7 @@ export class TourMySQLRepository implements ITourRepository {
     private readonly tourRepository: Repository<TourEntity>,
     private readonly mapperService: MapperService,
   ) {}
+
   async findAll(options?: object): Promise<Tour[]> {
     const tourEntities = await this.tourRepository.find(options);
     return tourEntities.map((tourEntity) =>
@@ -58,5 +59,26 @@ export class TourMySQLRepository implements ITourRepository {
     if (!tourEntity) throw new BadRequestException('Tour Not Found');
 
     await this.tourRepository.delete(id);
+  }
+
+  async deleteCharacteristicFromTour(
+    tourId: number,
+    characteristicId: number,
+  ): Promise<Tour> {
+    const tourEntity = await this.tourRepository.findOne({
+      where: { id: tourId },
+      relations: ['characteristics'],
+    });
+
+    if (!tourEntity) {
+      throw new BadRequestException('Tour not found');
+    }
+    tourEntity.characteristics = tourEntity.characteristics.filter(
+      (characteristic) => characteristic.id !== characteristicId,
+    );
+
+    const updatedTourEntity = await this.tourRepository.save(tourEntity);
+
+    return this.mapperService.entityToClass(updatedTourEntity, new Tour());
   }
 }

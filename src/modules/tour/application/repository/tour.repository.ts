@@ -7,4 +7,8 @@ export interface ITourRepository {
   create(tour: Tour): Promise<Tour>;
   update(id: number, newTour: Tour): Promise<Tour>;
   delete(id: number): Promise<void>;
+  deleteCharacteristicFromTour(
+    tourId: number,
+    characteristicId: number,
+  ): Promise<Tour>;
 }

@@ -61,4 +61,10 @@ export class TourService {
   async delete(id: number) {
     return this.tourRepository.delete(id);
   }
+  async deleteCharacteristic(tourId: number, characteristicId: number) {
+    return await this.tourRepository.deleteCharacteristicFromTour(
+      tourId,
+      characteristicId,
+    );
+  }
 }
