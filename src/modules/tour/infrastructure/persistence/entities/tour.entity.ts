@@ -17,43 +17,43 @@ export class TourEntity {
   id: number;
 
   @Column()
-  nombre: string;
+  name: string;
 
   @Column()
-  descripcion: string;
+  description: string;
 
   @Column()
-  recomendaciones: string;
+  recommendations: string;
 
   @Column()
-  imagen: string;
+  image: string;
 
   @Column({ type: 'time' })
-  tiempoEstimado: string;
+  estimatedTime: string;
 
   @Column()
-  pais: string;
+  country: string;
 
   @Column()
-  ciudad: string;
+  city: string;
 
   @Column()
-  aptoParaNinos: boolean;
+  suitableForChildren: boolean;
 
   @Column()
-  fechaExperiencia: Date;
+  experienceDate: Date;
 
   @Column({ type: 'time' })
-  horaInicio: string;
+  startTime: string;
 
   @Column({ type: 'time' })
-  horaFin: string;
+  endTime: string;
 
   @Column()
-  valor: number;
+  price: number;
 
   @Column()
-  cupos: number;
+  slots: number;
 
   @Column()
   userId: number;

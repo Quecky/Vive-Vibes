@@ -12,16 +12,16 @@ export class CharacteristicEntity {
   id: number;
 
   @Column()
-  nombre: string;
+  name: string;
 
   @Column()
-  descripcion: string;
+  description: string;
 
   @Column()
-  imagen: string;
+  image: string;
 
   @Column()
-  fecha: Date;
+  date: Date;
 
   @CreateDateColumn()
   createdAt: Date;
