@@ -12,7 +12,7 @@ import { CreateCharacteristicDto } from '../application/dto/create-characteristi
 import { UpdateCharacteristicDto } from '../application/dto/update-characteristic.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('characteristic')
+@ApiTags('Characteristic')
 @Controller('characteristics')
 export class CharacteristicsController {
   constructor(

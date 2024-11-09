@@ -39,6 +39,7 @@ export class TourMySQLRepository implements ITourRepository {
       where: {
         id,
       },
+      relations: ['characteristics'],
     });
 
     if (!tourEntity) throw new BadRequestException('Tour not found');

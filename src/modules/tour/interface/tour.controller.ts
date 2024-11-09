@@ -12,7 +12,7 @@ import { CreateTourDto } from '../application/dto/create-tour.dto';
 import { UpdateTourDto } from '../application/dto/update-tour.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('tour')
+@ApiTags('Tour')
 @Controller('tour')
 export class TourController {
   constructor(private readonly tourService: TourService) {}

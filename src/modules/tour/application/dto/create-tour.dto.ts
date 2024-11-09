@@ -69,4 +69,9 @@ export class CreateTourDto {
   @IsOptional()
   @IsNumber()
   categoryId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  characteristicId: number;
 }

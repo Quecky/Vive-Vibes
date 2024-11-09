@@ -17,5 +17,6 @@ import { CommonModule } from '@/common/common.module';
       useClass: CharacteristicMysqlRepository,
     },
   ],
+  exports: [CharacteristicsService],
 })
 export class CharacteristicsModule {}
