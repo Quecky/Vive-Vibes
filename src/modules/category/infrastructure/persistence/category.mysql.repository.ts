@@ -50,7 +50,7 @@ export class CategoryMysqlRepository implements ICategoryRepository {
     if (!categoryEntity) throw new BadRequestException('Category not found');
 
     this.categoryRepository.merge(categoryEntity, newCategory);
-    const categoryUpdated: Category =
+    const categoryUpdated: CategoryEntity =
       await this.categoryRepository.save(categoryEntity);
     return this.mapperService.entityToClass(categoryUpdated, new Category());
   }
