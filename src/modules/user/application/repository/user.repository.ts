@@ -1,4 +1,4 @@
-import { User } from '../../domain/user.domain';
+import { User } from '@/modules/user/domain/user.domain';
 
 export const USER_REPOSITORY = 'USER_REPOSITORY';
 

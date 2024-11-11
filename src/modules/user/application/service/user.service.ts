@@ -4,12 +4,14 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../../infrastructure/persistence/entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { MapperService } from '@/common/application/mapper/mapper.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly mapperService: MapperService,
   ) {}
 
   // Método para crear un nuevo usuario
