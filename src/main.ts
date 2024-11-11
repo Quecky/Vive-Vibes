@@ -24,8 +24,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Vive Vibes ANALYSER')
-    .setDescription('Vive Vibes ANALYSER API')
+    .setTitle('Vive Vibes ')
+    .setDescription('Vive Vibes API')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
