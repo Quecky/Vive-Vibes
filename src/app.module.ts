@@ -7,8 +7,12 @@ import { dataSourceOptions } from '@configuration/orm.configuration';
 import { configuration } from '@configuration/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { configurationValidate } from '@configuration/configuration.validate';
-import { CategoryModule } from '@modules/category/category.module';
+
+import { CategoryModule } from './modules/category/category.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { CharacteristicsModule } from '@modules/characteristics/characteristics.module';
+
 
 @Module({
   imports: [
@@ -28,7 +32,10 @@ import { CharacteristicsModule } from '@modules/characteristics/characteristics.
     }),
     TourModule,
     CategoryModule,
+    UserModule,
+    AuthModule,
     CharacteristicsModule,
+
   ],
   controllers: [],
   providers: [],
