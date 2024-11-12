@@ -17,4 +17,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEnum(UserType)
   type?: UserType;
+
+  @IsOptional()
+  @IsString()
+  registrationDate?: string;
 }
