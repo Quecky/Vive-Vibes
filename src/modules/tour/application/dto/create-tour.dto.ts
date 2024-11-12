@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsBoolean,
   IsDateString,
   IsNumber,
@@ -72,6 +73,7 @@ export class CreateTourDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsNumber()
-  characteristicId: number;
+  @IsArray()
+  @IsNumber({}, { each: true })
+  characteristicId: number[];
 }

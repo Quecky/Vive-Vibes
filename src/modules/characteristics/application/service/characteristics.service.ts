@@ -31,8 +31,8 @@ export class CharacteristicsService {
     return response;
   }
 
-  async findAll() {
-    const response = await this.characteristicRepository.findAll();
+  async findAll(options?: object) {
+    const response = await this.characteristicRepository.findAll(options);
     return response;
   }
 
