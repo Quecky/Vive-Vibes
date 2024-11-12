@@ -1,6 +1,6 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, QueryFailedError  } from 'typeorm';
 import { IUserRepository } from '../../application/repository/user.repository';
 import { User } from '../../domain/user.domain';
 import { UserEntity } from './entities/user.entity';
