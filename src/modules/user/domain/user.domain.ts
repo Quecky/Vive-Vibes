@@ -5,6 +5,6 @@ export class User extends Base {
   name: string;
   email: string;
   password: string;
-  registration_date: Date;
+  registrationDate: Date;
   type: UserType;
 }
