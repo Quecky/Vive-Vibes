@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException,HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../../infrastructure/persistence/entities/user.entity';
@@ -16,6 +16,23 @@ export class UserService {
 
   // Método para crear un nuevo usuario
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const findEmail = await this.userRepository.findOne({ where: { email: createUserDto.email } });
+    if (findEmail) {
+      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
+    }
+
+    if (!createUserDto.email.includes('@') || !createUserDto.email.includes('.')) {
+      throw new HttpException('Email not valid', HttpStatus.BAD_REQUEST);
+    }
+  
+    if (!createUserDto.name || createUserDto.name.trim() === '') {
+      throw new HttpException('Name cannot be empty', HttpStatus.BAD_REQUEST);
+    }
+  
+    if (!createUserDto.password || createUserDto.password.trim() === '') {
+      throw new HttpException('Password cannot be empty', HttpStatus.BAD_REQUEST);
+    }
+
     const newUser = this.userRepository.create(createUserDto);
     return await this.userRepository.save(newUser);
   }
