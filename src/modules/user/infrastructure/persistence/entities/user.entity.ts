@@ -9,19 +9,19 @@ export class UserEntity {
   @Column({ length: 100 })
   name: string;
 
-  @Column({ length: 100, unique: true })
+  @Column({ length: 100, unique: true, nullable: false })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   registrationDate: Date;
 
   @Column({
     type: 'enum',
     enum: UserType,
-    default: UserType.USER,
+    default: 3,
   })
   type: UserType;
 }
