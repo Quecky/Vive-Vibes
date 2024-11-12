@@ -10,6 +10,7 @@ import { UpdateTourDto } from '../dto/update-tour.dto';
 import { CategoryService } from '@/modules/category/application/service/category.service';
 import { Characteristic } from '@/modules/characteristics/domain/characteristic.domain';
 import { CharacteristicsService } from '@/modules/characteristics/application/service/characteristics.service';
+import { In } from 'typeorm';
 
 @Injectable()
 export class TourService {
@@ -44,17 +45,19 @@ export class TourService {
   }
 
   async update(id: number, updateTourDto: UpdateTourDto) {
-    let characteristic: Characteristic;
+    let characteristic: Characteristic[];
     if (updateTourDto.characteristicId) {
-      characteristic = await this.characteristicsService.finById(
-        updateTourDto.characteristicId,
-      );
+      const idsQuery = {
+        where: { id: In(updateTourDto.characteristicId) },
+      };
+      characteristic = await this.characteristicsService.findAll(idsQuery);
     }
+
     const tourUpdated = this.mapperService.dtoToClass(
       updateTourDto,
       new Tour(),
     );
-    tourUpdated.characteristics = [characteristic];
+    tourUpdated.characteristics = characteristic;
     return await this.tourRepository.update(id, tourUpdated);
   }
 
