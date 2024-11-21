@@ -11,4 +11,7 @@ export interface ITourRepository {
     tourId: number,
     characteristicId: number,
   ): Promise<Tour>;
+  findDatesByTourId(
+    tourId: number,
+  ): Promise<{ fechaDisponible: string; cuposRestantes: number }[]>;
 }

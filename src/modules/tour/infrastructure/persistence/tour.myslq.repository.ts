@@ -81,4 +81,22 @@ export class TourMySQLRepository implements ITourRepository {
 
     return this.mapperService.entityToClass(updatedTourEntity, new Tour());
   }
+
+  async findDatesByTourId(
+    tourId: number,
+  ): Promise<{ fechaDisponible: string; cuposRestantes: number }[]> {
+    const tour = await this.tourRepository.findOne({
+      where: { id: tourId },
+      relations: ['fechasExperiencia'],
+    });
+
+    if (!tour) {
+      throw new BadRequestException('Tour not found');
+    }
+
+    return tour.fechasExperiencia.map((fecha) => ({
+      fechaDisponible: fecha.fechaDisponible,
+      cuposRestantes: fecha.cupos,
+    }));
+  }
 }

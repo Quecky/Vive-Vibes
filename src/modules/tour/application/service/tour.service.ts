@@ -70,4 +70,10 @@ export class TourService {
       characteristicId,
     );
   }
+
+  async findDatesByTourId(
+    tourId: number,
+  ): Promise<{ fechaDisponible: string; cuposRestantes: number }[]> {
+    return this.tourRepository.findDatesByTourId(tourId);
+  }
 }

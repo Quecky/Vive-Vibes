@@ -1,5 +1,7 @@
 import { CategoryEntity } from '@/modules/category/infrastructure/persistence/entities/category.entity';
 import { CharacteristicEntity } from '@/modules/characteristics/infrastructure/persistence/entities/characteristic.entity';
+import { FechaExperienciaEntity } from '@/modules/tour/infrastructure/persistence/entities/fechaExperiencia.entity';
+
 import {
   Column,
   Entity,
@@ -9,6 +11,7 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('tour')
@@ -80,4 +83,10 @@ export class TourEntity {
     },
   })
   characteristics: CharacteristicEntity[];
+
+  @OneToMany(
+    () => FechaExperienciaEntity,
+    (fechaExperiencia) => fechaExperiencia.tour,
+  )
+  fechasExperiencia: FechaExperienciaEntity[]; // Relación con FechaExperienciaEntity
 }

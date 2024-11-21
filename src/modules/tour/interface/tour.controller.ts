@@ -49,4 +49,9 @@ export class TourController {
   ) {
     return this.tourService.deleteCharacteristic(+tourId, +characteristicId);
   }
+
+  @Get(':id/fechas')
+  findDatesByTourId(@Param('id') id: string) {
+    return this.tourService.findDatesByTourId(+id);
+  }
 }
