@@ -26,8 +26,8 @@ export class CreateTourDto {
   image: string;
 
   @ApiProperty()
-  @IsString()
-  estimatedTime: string;
+  @IsNumber()
+  estimatedTime: number;
 
   @ApiProperty()
   @IsString()
@@ -46,12 +46,12 @@ export class CreateTourDto {
   experienceDate: Date;
 
   @ApiProperty()
-  @IsString()
-  startTime: string;
+  @IsDateString()
+  startTime: Date;
 
   @ApiProperty()
-  @IsString()
-  endTime: string;
+  @IsDateString()
+  endTime: Date;
 
   @ApiProperty()
   @IsNumber()

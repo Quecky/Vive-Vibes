@@ -19,10 +19,10 @@ export class TourEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({unique: true})
   name: string;
 
-  @Column()
+  @Column({length: 2000})
   description: string;
 
   @Column()
