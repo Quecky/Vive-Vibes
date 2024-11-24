@@ -3,7 +3,7 @@ import { ITourRepository } from '../../application/repository/tour.repository';
 import { Tour } from '../../domain/tour.domain';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TourEntity } from './entities/tour.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { MapperService } from '@/common/application/mapper/mapper.service';
 
 @Injectable()
@@ -14,10 +14,21 @@ export class TourMySQLRepository implements ITourRepository {
     private readonly mapperService: MapperService,
   ) {}
 
-  async findAll(options?: object): Promise<Tour[]> {
-    const tourEntities = await this.tourRepository.find(options);
-    return tourEntities.map((tourEntity) =>
-      this.mapperService.entityToClass(tourEntity, new Tour()),
+  async findAll(search?: string): Promise<Tour[]> {
+    const tourEntities = await this.tourRepository.find({
+      where: [
+        { name: Like(`%${search}%`) },
+        { country: Like(`%${search}%`) },
+      ],
+      relations: ['category', 'characteristics'],
+    });
+  
+    if (!tourEntities || tourEntities.length === 0) {
+      throw new BadRequestException('No tours found with the given search term');
+    }
+  
+    return tourEntities.map((entity) =>
+      this.mapperService.entityToClass(entity, new Tour()),
     );
   }
   async findById(id: number): Promise<Tour> {

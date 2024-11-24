@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TourService } from '../application/service/tour.service';
 import { CreateTourDto } from '../application/dto/create-tour.dto';
@@ -23,8 +24,8 @@ export class TourController {
   }
 
   @Get()
-  findAll() {
-    return this.tourService.findAll();
+  findAll(@Query('search') search?: string) {
+    return this.tourService.findAll(search);
   }
 
   @Get(':id')
