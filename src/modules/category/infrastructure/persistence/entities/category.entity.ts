@@ -9,6 +9,12 @@ export class CategoryEntity {
   @Column()
   name: string;
 
+  @Column({ type: 'text' })
+  description: string;
+
+  @Column()
+  photo: string;
+
   @OneToMany(() => TourEntity, (tour) => tour.category)
   tours?: TourEntity[];
 }
