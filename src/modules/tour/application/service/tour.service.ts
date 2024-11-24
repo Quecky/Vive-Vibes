@@ -39,8 +39,8 @@ export class TourService {
     return response;
   }
 
-  async findAll() {
-    const response = await this.tourRepository.findAll();
+  async findAll(search?: string) {
+    const response = await this.tourRepository.findAll(search);
     return response;
   }
 
