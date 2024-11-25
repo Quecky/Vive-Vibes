@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ICharacteristicRepository } from '../../application/repository/characteristic.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CharacteristicEntity } from './entities/characteristic.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { MapperService } from '@/common/application/mapper/mapper.service';
 import { Characteristic } from '../../domain/characteristic.domain';
 
@@ -37,6 +37,21 @@ export class CharacteristicMysqlRepository
       new Characteristic(),
     );
   }
+
+  async findByIds(ids: number[]): Promise<Characteristic[]> {
+    if (!ids || ids.length === 0) {
+      throw new BadRequestException('No characteristic IDs provided');
+    }
+    const characteristics = await this.characteristicRepository.find({
+      where: { id: In(ids) }, 
+    });
+
+    if (characteristics.length !== ids.length) {
+      throw new BadRequestException('Some characteristics not found');
+    }
+    return characteristics;
+  }
+
   async create(characteristic: Characteristic): Promise<Characteristic> {
     const characteristicEntity = this.mapperService.classToEntity(
       characteristic,

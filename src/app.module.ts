@@ -12,6 +12,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CharacteristicsModule } from '@modules/characteristics/characteristics.module';
+import { ImageAttachedModule } from './modules/img/img.module';
 
 
 @Module({
@@ -35,6 +36,7 @@ import { CharacteristicsModule } from '@modules/characteristics/characteristics.
     UserModule,
     AuthModule,
     CharacteristicsModule,
+    ImageAttachedModule
 
   ],
   controllers: [],

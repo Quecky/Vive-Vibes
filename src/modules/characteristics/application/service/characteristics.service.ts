@@ -7,6 +7,7 @@ import {
 } from '../repository/characteristic.repository';
 import { MapperService } from '@/common/application/mapper/mapper.service';
 import { Characteristic } from '../../domain/characteristic.domain';
+import { In } from 'typeorm';
 
 @Injectable()
 export class CharacteristicsService {
@@ -31,6 +32,11 @@ export class CharacteristicsService {
     return response;
   }
 
+  async findByIds(ids: number[]): Promise<Characteristic[]> {
+    const characteristics = await this.characteristicRepository.findByIds(ids);
+    return characteristics;
+  }
+  
   async findAll(options?: object) {
     const response = await this.characteristicRepository.findAll(options);
     return response;

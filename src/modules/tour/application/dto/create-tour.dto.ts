@@ -22,8 +22,9 @@ export class CreateTourDto {
   recommendations: string;
 
   @ApiProperty()
-  @IsString()
-  image: string;
+  @IsArray()
+  @IsNumber({}, { each: true })
+  imageId: number[];
 
   @ApiProperty()
   @IsNumber()

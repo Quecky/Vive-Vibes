@@ -9,6 +9,7 @@ import { TOUR_REPOSITORY } from './application/repository/tour.repository';
 import { TourMySQLRepository } from './infrastructure/persistence/tour.myslq.repository';
 import { CategoryModule } from '../category/category.module';
 import { CharacteristicsModule } from '../characteristics/characteristics.module';
+import { ImageAttachedModule } from '../img/img.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CharacteristicsModule } from '../characteristics/characteristics.module
     CommonModule,
     CategoryModule,
     CharacteristicsModule,
+    ImageAttachedModule,
   ],
   controllers: [TourController],
   providers: [

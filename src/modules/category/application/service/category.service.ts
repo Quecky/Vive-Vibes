@@ -25,7 +25,7 @@ export class CategoryService {
     return response;
   }
 
-  async finById(id: number) {
+  async findById(id: number) {
     const response = await this.categoryRepository.findById(id);
     return response;
   }

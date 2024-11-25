@@ -1,12 +1,13 @@
 import { Category } from '@/modules/category/domain/category.domain';
 import { Characteristic } from '@/modules/characteristics/domain/characteristic.domain';
+import { ImagenAttached } from '@/modules/img/domain/img.domain';
 import { Base } from 'src/common/domain/base.domain';
 
 export class Tour extends Base {
   name: string;
   description: string;
   recommendations: string;
-  image: string;
+  images: ImagenAttached[];
   estimatedTime: string;
   country: string;
   city: string;

@@ -1,5 +1,6 @@
 import { CategoryEntity } from '@/modules/category/infrastructure/persistence/entities/category.entity';
 import { CharacteristicEntity } from '@/modules/characteristics/infrastructure/persistence/entities/characteristic.entity';
+import { ImageEntity } from '@/modules/img/infraestructure/persistence/entities/img.entity';
 import { FechaExperienciaEntity } from '@/modules/tour/infrastructure/persistence/entities/fechaExperiencia.entity';
 
 import {
@@ -28,8 +29,16 @@ export class TourEntity {
   @Column()
   recommendations: string;
 
-  @Column()
-  image: string;
+  @ManyToMany(() => ImageEntity)
+  @JoinTable({
+    name: 'tour_images',
+    joinColumn: { name: 'tour_id', referencedColumnName: 'id' },
+    inverseJoinColumn: {
+      name: 'image_id',
+      referencedColumnName: 'id',
+    },
+  })
+  images: ImageEntity[];
 
   @Column({ type: 'time' })
   estimatedTime: string;

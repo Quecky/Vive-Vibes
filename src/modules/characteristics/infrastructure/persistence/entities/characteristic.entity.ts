@@ -1,7 +1,9 @@
+import { TourEntity } from '@/modules/tour/infrastructure/persistence/entities/tour.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -28,4 +30,7 @@ export class CharacteristicEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => TourEntity, (tour) => tour.category)
+  tours?: TourEntity[];
 }
