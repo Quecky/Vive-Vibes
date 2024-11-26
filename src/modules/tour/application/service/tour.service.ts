@@ -11,6 +11,7 @@ import { CategoryService } from '@/modules/category/application/service/category
 import { Characteristic } from '@/modules/characteristics/domain/characteristic.domain';
 import { CharacteristicsService } from '@/modules/characteristics/application/service/characteristics.service';
 import { In } from 'typeorm';
+import { FilterTourDto } from '../dto/filter-tour.dto';
 
 @Injectable()
 export class TourService {
@@ -39,8 +40,8 @@ export class TourService {
     return response;
   }
 
-  async findAll(search?: string) {
-    const response = await this.tourRepository.findAll(search);
+  async findAll(filters: FilterTourDto) {
+    const response = await this.tourRepository.findAll(filters);
     return response;
   }
 

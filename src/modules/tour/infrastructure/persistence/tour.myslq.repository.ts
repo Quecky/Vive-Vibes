@@ -3,8 +3,9 @@ import { ITourRepository } from '../../application/repository/tour.repository';
 import { Tour } from '../../domain/tour.domain';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TourEntity } from './entities/tour.entity';
-import { Like, Repository } from 'typeorm';
+import { Between, Like, Repository,MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
 import { MapperService } from '@/common/application/mapper/mapper.service';
+import { FilterTourDto } from '../../application/dto/filter-tour.dto';
 
 @Injectable()
 export class TourMySQLRepository implements ITourRepository {
@@ -14,15 +15,45 @@ export class TourMySQLRepository implements ITourRepository {
     private readonly mapperService: MapperService,
   ) {}
 
-  async findAll(search?: string): Promise<Tour[]> {
+  async findAll(filters: FilterTourDto): Promise<Tour[]> {
+    const { search, startDate, endDate } = filters;
+
+    const whereConditions: any[] = [];
+
+    if (search) {
+      whereConditions.push(
+        { name: Like(`%${filters.search}%`) },
+        { country: Like(`%${filters.search}%`) }
+      );
+    }
+
+    if (startDate || endDate) {
+      const dateCondition: any = { fechasExperiencia: {} };
+
+      if (startDate) {
+        dateCondition.fechasExperiencia.fechaDisponible = MoreThanOrEqual(startDate);
+      }
+
+      if (endDate) {
+        dateCondition.fechasExperiencia.fechaDisponible = LessThanOrEqual(endDate);
+      }
+
+      if (startDate && endDate) {
+        dateCondition.fechasExperiencia.fechaDisponible = Between(startDate, endDate);
+      }
+
+      if (whereConditions.length > 0) {
+        whereConditions.forEach((condition) => Object.assign(condition, dateCondition));
+      } else {
+        whereConditions.push(dateCondition);
+      }
+    }
+
     const tourEntities = await this.tourRepository.find({
-      where: [
-        { name: Like(`%${search}%`) },
-        { country: Like(`%${search}%`) },
-      ],
-      relations: ['category', 'characteristics'],
+      relations: ['category', 'characteristics', 'fechasExperiencia'],
+      where: whereConditions,
     });
-  
+
     if (!tourEntities || tourEntities.length === 0) {
       throw new BadRequestException('No tours found with the given search term');
     }
@@ -31,6 +62,7 @@ export class TourMySQLRepository implements ITourRepository {
       this.mapperService.entityToClass(entity, new Tour()),
     );
   }
+
   async findById(id: number): Promise<Tour> {
     const tourEntity = await this.tourRepository.findOne({
       where: { id },
