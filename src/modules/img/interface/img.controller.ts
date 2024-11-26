@@ -6,11 +6,17 @@ import {
     Patch,
     Param,
     Delete,
+    UseInterceptors,
+    UploadedFiles,
+    HttpException,
+    HttpStatus,
     } from '@nestjs/common';
     import { ApiTags } from '@nestjs/swagger';
 import { ImagesAttachedsService } from '../application/service/img.service';
 import { CreateImagenDto } from '../application/dto/create-imagen.dto';
 import { UpdateImagenDto } from '../application/dto/update-imagen.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from '../multer-config';
 
     @ApiTags('Images')
     @Controller('images')
@@ -46,5 +52,25 @@ import { UpdateImagenDto } from '../application/dto/update-imagen.dto';
         remove(@Param('id') id: string) {
         return this.imagenAttachedService.delete(+id);
         }
+
+        
+        @Post('upload-multiple')
+        @UseInterceptors(FilesInterceptor('files', 10, multerConfig)) // Hasta 10 archivos
+        async uploadMultipleImages(@UploadedFiles() files: Express.Multer.File[]) {
+            if (!files || files.length === 0) {
+            throw new HttpException('No se proporcionaron archivos', HttpStatus.BAD_REQUEST);
+            }
+
+            try {
+            const uploadedImages = await this.imagenAttachedService.uploadImages(files);
+            return {
+                message: 'Imágenes subidas con éxito',
+                data: uploadedImages,
+            };
+            } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
     }
     

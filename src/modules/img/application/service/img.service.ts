@@ -4,13 +4,16 @@ import { IImagenAttachedRepository, IMAGEN_REPOSITORY } from '../repository/img.
 import { CreateImagenDto } from '../dto/create-imagen.dto';
 import { ImagenAttached } from '../../domain/img.domain';
 import { UpdateImagenDto } from '../dto/update-imagen.dto';
+import { S3Service } from '@/modules/img/s3.service';
+import * as sharp from 'sharp';
 
 @Injectable()
 export class ImagesAttachedsService {
     constructor(
     @Inject(IMAGEN_REPOSITORY)
     private readonly imagenAttachedRepository: IImagenAttachedRepository,
-    private readonly mapperService: MapperService,
+    private readonly mapperService: MapperService,    
+    private readonly s3Service: S3Service,
     ) {}
 
     async create(createImagenDto: CreateImagenDto) {
@@ -51,5 +54,30 @@ export class ImagesAttachedsService {
 
     async delete(id: number) {
     return this.imagenAttachedRepository.delete(id);
+    }
+
+    
+    async uploadImages(files: Express.Multer.File[]): Promise<ImagenAttached[]> {
+        const uploadedImages: ImagenAttached[] = [];
+    
+        for (const file of files) {
+            const processedImage = await sharp(file.buffer)
+            .resize({ width: 1000, height: 1000, fit: 'contain' })
+            .toBuffer();
+
+            const url = await this.s3Service.uploadImage(
+                processedImage,
+                file.originalname,
+                file.mimetype,
+            );
+
+            const image: ImagenAttached = new ImagenAttached();
+            image.name = file.originalname;  
+            image.url = url;          
+    
+            uploadedImages.push(image);
+        }
+    
+        return uploadedImages;
     }
 }
