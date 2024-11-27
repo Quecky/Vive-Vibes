@@ -27,19 +27,42 @@ export class TourMySQLRepository implements ITourRepository {
       );
     }
 
+    //if (startDate || endDate) {
+    //  const dateCondition: any = { fechasExperiencia: {} };
+//
+    //  if (startDate) {
+    //    dateCondition.fechasExperiencia.fechaDisponible = MoreThanOrEqual(startDate);
+    //  }
+//
+    //  if (endDate) {
+    //    dateCondition.fechasExperiencia.fechaDisponible = LessThanOrEqual(endDate);
+    //  }
+//
+    //  if (startDate && endDate) {
+    //    dateCondition.fechasExperiencia.fechaDisponible = Between(startDate, endDate);
+    //  }
+//
+    //  if (whereConditions.length > 0) {
+    //    whereConditions.forEach((condition) => Object.assign(condition, dateCondition));
+    //  } else {
+    //    whereConditions.push(dateCondition);
+    //  }
+    //}
+
+    console.log("antes del start_date");
     if (startDate || endDate) {
       const dateCondition: any = { fechasExperiencia: {} };
 
       if (startDate) {
-        dateCondition.fechasExperiencia.fechaDisponible = MoreThanOrEqual(startDate);
+        dateCondition.experienceDate = MoreThanOrEqual(startDate);
       }
 
       if (endDate) {
-        dateCondition.fechasExperiencia.fechaDisponible = LessThanOrEqual(endDate);
+        dateCondition.experienceDate = LessThanOrEqual(endDate);
       }
 
       if (startDate && endDate) {
-        dateCondition.fechasExperiencia.fechaDisponible = Between(startDate, endDate);
+        dateCondition.experienceDate = Between(startDate, endDate);
       }
 
       if (whereConditions.length > 0) {
@@ -50,7 +73,7 @@ export class TourMySQLRepository implements ITourRepository {
     }
 
     const tourEntities = await this.tourRepository.find({
-      relations: ['category', 'characteristics', 'fechasExperiencia'],
+      relations: ['category', 'characteristics'],
       where: whereConditions,
     });
 
