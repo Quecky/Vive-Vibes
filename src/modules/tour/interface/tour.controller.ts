@@ -12,6 +12,7 @@ import { TourService } from '../application/service/tour.service';
 import { CreateTourDto } from '../application/dto/create-tour.dto';
 import { UpdateTourDto } from '../application/dto/update-tour.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FilterTourDto } from '../application/dto/filter-tour.dto';
 
 @ApiTags('Tour')
 @Controller('tour')
@@ -24,8 +25,8 @@ export class TourController {
   }
 
   @Get()
-  findAll(@Query('search') search?: string) {
-    return this.tourService.findAll(search);
+  findAll(@Query() filterTourDto: FilterTourDto) { 
+    return this.tourService.findAll(filterTourDto);
   }
 
   @Get(':id')
