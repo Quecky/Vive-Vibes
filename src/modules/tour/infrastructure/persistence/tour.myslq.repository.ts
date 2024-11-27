@@ -3,15 +3,27 @@ import { ITourRepository } from '../../application/repository/tour.repository';
 import { Tour } from '../../domain/tour.domain';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TourEntity } from './entities/tour.entity';
-import { Between, Like, Repository,MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import {
+  Between,
+  Like,
+  Repository,
+  MoreThanOrEqual,
+  LessThanOrEqual,
+} from 'typeorm';
 import { MapperService } from '@/common/application/mapper/mapper.service';
 import { FilterTourDto } from '../../application/dto/filter-tour.dto';
+import { ReservaEntity } from '../../../reserva/infrastructure/persistence/entities/reserva.entity';
+import { FechaExperienciaEntity } from '../../infrastructure/persistence/entities/fechaExperiencia.entity';
 
 @Injectable()
 export class TourMySQLRepository implements ITourRepository {
   constructor(
     @InjectRepository(TourEntity)
     private readonly tourRepository: Repository<TourEntity>,
+    @InjectRepository(ReservaEntity)
+    private readonly reservaRepository: Repository<ReservaEntity>,
+    @InjectRepository(FechaExperienciaEntity)
+    private readonly fechaExperienciaRepository: Repository<FechaExperienciaEntity>,
     private readonly mapperService: MapperService,
   ) {}
 
@@ -23,7 +35,7 @@ export class TourMySQLRepository implements ITourRepository {
     if (search) {
       whereConditions.push(
         { name: Like(`%${filters.search}%`) },
-        { country: Like(`%${filters.search}%`) }
+        { country: Like(`%${filters.search}%`) },
       );
     }
 
@@ -31,19 +43,26 @@ export class TourMySQLRepository implements ITourRepository {
       const dateCondition: any = { fechasExperiencia: {} };
 
       if (startDate) {
-        dateCondition.fechasExperiencia.fechaDisponible = MoreThanOrEqual(startDate);
+        dateCondition.fechasExperiencia.fechaDisponible =
+          MoreThanOrEqual(startDate);
       }
 
       if (endDate) {
-        dateCondition.fechasExperiencia.fechaDisponible = LessThanOrEqual(endDate);
+        dateCondition.fechasExperiencia.fechaDisponible =
+          LessThanOrEqual(endDate);
       }
 
       if (startDate && endDate) {
-        dateCondition.fechasExperiencia.fechaDisponible = Between(startDate, endDate);
+        dateCondition.fechasExperiencia.fechaDisponible = Between(
+          startDate,
+          endDate,
+        );
       }
 
       if (whereConditions.length > 0) {
-        whereConditions.forEach((condition) => Object.assign(condition, dateCondition));
+        whereConditions.forEach((condition) =>
+          Object.assign(condition, dateCondition),
+        );
       } else {
         whereConditions.push(dateCondition);
       }
@@ -55,9 +74,11 @@ export class TourMySQLRepository implements ITourRepository {
     });
 
     if (!tourEntities || tourEntities.length === 0) {
-      throw new BadRequestException('No tours found with the given search term');
+      throw new BadRequestException(
+        'No tours found with the given search term',
+      );
     }
-  
+
     return tourEntities.map((entity) =>
       this.mapperService.entityToClass(entity, new Tour()),
     );
@@ -128,18 +149,30 @@ export class TourMySQLRepository implements ITourRepository {
   async findDatesByTourId(
     tourId: number,
   ): Promise<{ fechaDisponible: string; cuposRestantes: number }[]> {
-    const tour = await this.tourRepository.findOne({
-      where: { id: tourId },
-      relations: ['fechasExperiencia'],
-    });
+    const fechas = await this.fechaExperienciaRepository
+      .createQueryBuilder('fe')
+      .leftJoinAndSelect('fe.reservas', 'r') 
+      .select([
+        'fe.id AS fecha_id',
+        'fe.fechaDisponible AS fecha_disponible',
+        'fe.cupos AS cupos_totales',
+        'COALESCE(SUM(r.cantidadPersonas), 0) AS cantidad_reservada',
+        '(fe.cupos - COALESCE(SUM(r.cantidadPersonas), 0)) AS cupos_restantes',
+      ])
+      .where('fe.tour_id = :tourId', { tourId })
+      .groupBy('fe.id, fe.fechaDisponible, fe.cupos')
+      .getRawMany();
 
-    if (!tour) {
-      throw new BadRequestException('Tour not found');
-    }
+    return this.mapDatesWithAvailability(fechas);
+  }
 
-    return tour.fechasExperiencia.map((fecha) => ({
-      fechaDisponible: fecha.fechaDisponible,
-      cuposRestantes: fecha.cupos,
+  private mapDatesWithAvailability(
+    fechas: any[],
+  ): { fechaDisponible: string; cuposRestantes: number }[] {
+    return fechas.map((fecha) => ({
+      fechaDisponible: fecha.fecha_disponible,
+      cuposRestantes: parseInt(fecha.cupos_restantes, 10),
     }));
   }
+  
 }

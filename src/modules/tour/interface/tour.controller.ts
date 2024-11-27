@@ -25,7 +25,7 @@ export class TourController {
   }
 
   @Get()
-  findAll(@Query() filterTourDto: FilterTourDto) { 
+  findAll(@Query() filterTourDto: FilterTourDto) {
     return this.tourService.findAll(filterTourDto);
   }
 

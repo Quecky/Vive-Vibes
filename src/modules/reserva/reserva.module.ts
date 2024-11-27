@@ -22,5 +22,6 @@ import { ReservaMySQLRepository } from './infrastructure/persistence/reserva.mys
       useClass: ReservaMySQLRepository,
     },
   ],
+  exports: [TypeOrmModule, ReservaService],
 })
 export class ReservaModule {}

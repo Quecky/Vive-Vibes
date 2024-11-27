@@ -1,6 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { UserEntity } from '@/modules/user/infrastructure/persistence/entities/user.entity';
 import { TourEntity } from '@/modules/tour/infrastructure/persistence/entities/tour.entity';
+import { FechaExperienciaEntity } from '@/modules/tour/infrastructure/persistence/entities/fechaExperiencia.entity';
+
 @Entity('reservas')
 export class ReservaEntity {
   @PrimaryGeneratedColumn()
@@ -30,9 +39,21 @@ export class ReservaEntity {
   @Column({ name: 'tour_id', type: 'int' })
   tourId: number;
 
+  @Column({ name: 'fecha_experiencia_id', type: 'int', nullable: true })
+  fechaExperienciaId: number;
+
   @ManyToOne(() => TourEntity, (tour) => tour.id)
+  @JoinColumn({ name: 'tour_id' })
   tour: TourEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.id)
+  @JoinColumn({ name: 'usuario_id' })
   usuario: UserEntity;
+
+  @OneToMany(() => ReservaEntity, (reserva) => reserva.fechaExperiencia)
+  reservas: ReservaEntity[];
+
+  @ManyToOne(() => FechaExperienciaEntity, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'fecha_experiencia_id' })
+  fechaExperiencia: FechaExperienciaEntity;
 }

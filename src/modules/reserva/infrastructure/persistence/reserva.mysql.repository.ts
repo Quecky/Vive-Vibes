@@ -40,7 +40,6 @@ export class ReservaMySQLRepository implements IReservaRepository {
     if (!reserva) {
       throw new NotFoundException(`Reserva with ID ${id} not found`);
     }
-
     return new Reserva({
       id: reserva.id,
       tourId: reserva.tour.id,

@@ -1,18 +1,24 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { CreateReservaDto } from '../dto/create-reserva.dto';
 import { UpdateReservaDto } from '../dto/update-reserva.dto';
-import { IReservaRepository } from '../repository/reserva.repository';
+import {
+  IReservaRepository,
+  RESERVA_REPOSITORY,
+} from '../repository/reserva.repository';
 import { Reserva } from '../../domain/reserva.domain';
 
 @Injectable()
 export class ReservaService {
-  constructor(private readonly reservaRepository: IReservaRepository) {}
+  constructor(
+    @Inject(RESERVA_REPOSITORY)
+    private readonly reservaRepository: IReservaRepository,
+  ) {}
 
   /**
    * Obtiene todas las reservas
    */
   async findAll(): Promise<Reserva[]> {
-    return await this.reservaRepository.findAll(); // Lógica sin filtro
+    return await this.reservaRepository.findAll();
   }
 
   /**
@@ -51,11 +57,11 @@ export class ReservaService {
     const existingReserva = await this.findById(id);
 
     const reserva = new Reserva({
-      ...existingReserva, // Retiene los datos existentes
-      ...updateReservaDto, // Sobrescribe con los datos nuevos
+      ...existingReserva,
+      ...updateReservaDto,
       fechaReserva: updateReservaDto.fechaReserva
         ? new Date(updateReservaDto.fechaReserva)
-        : existingReserva.fechaReserva, // Mantiene la fecha existente si no se actualiza
+        : existingReserva.fechaReserva,
     });
 
     return await this.reservaRepository.update(id, reserva);

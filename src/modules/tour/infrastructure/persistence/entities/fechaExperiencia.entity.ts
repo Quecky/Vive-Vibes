@@ -3,10 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { TourEntity } from './tour.entity';
+import { ReservaEntity } from '../../../../reserva/infrastructure/persistence/entities/reserva.entity';
 
 @Entity('fecha_experiencia')
 export class FechaExperienciaEntity {
@@ -22,7 +25,11 @@ export class FechaExperienciaEntity {
   @ManyToOne(() => TourEntity, (tour) => tour.fechasExperiencia, {
     onDelete: 'CASCADE',
   })
-  tour: TourEntity; // Relación con la entidad TourEntity
+  @JoinColumn({ name: 'tour_id' }) // Relación con la tabla `tour`
+  tour: TourEntity;
+
+  @OneToMany(() => ReservaEntity, (reserva) => reserva.fechaExperiencia) // Relación con las reservas
+  reservas: ReservaEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
