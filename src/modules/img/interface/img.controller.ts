@@ -62,10 +62,14 @@ import { multerConfig } from '../multer-config';
             }
 
             try {
-            const uploadedImages = await this.imagenAttachedService.uploadImages(files);
+            const uploadedImages = await this.imagenAttachedService.uploadImages2(files);
             return {
                 message: 'Imágenes subidas con éxito',
-                data: uploadedImages,
+                // data: uploadedImages,
+                data: uploadedImages.map(image => ({
+                    name: image.name, // El nombre original del archivo o procesado
+                    url: image.url,   // URL devuelta por S3
+                })),
             };
             } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

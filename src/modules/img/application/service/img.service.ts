@@ -80,4 +80,23 @@ export class ImagesAttachedsService {
     
         return uploadedImages;
     }
+
+    async uploadImages2(files: Express.Multer.File[]): Promise<{ name: string; url: string }[]> {
+        return Promise.all(files.map(async (file) => {
+
+            const processedImage = await sharp(file.buffer)
+            .resize({ width: 1000, height: 1000, fit: 'contain' })
+            .toBuffer();
+            const uploadedImage = await this.s3Service.uploadImage(
+                processedImage,
+                file.originalname,
+                file.mimetype,
+            ); // Método que sube a S3
+            return {
+                name: file.originalname, // Nombre del archivo original
+                url: uploadedImage, // URL devuelta por S3
+            };
+        }));
+    }
+    
 }
