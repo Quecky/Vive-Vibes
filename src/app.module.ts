@@ -36,7 +36,8 @@ import { ReservaModule } from './modules/reserva/reserva.module';
     UserModule,
     AuthModule,
     CharacteristicsModule,
-
+    ImageAttachedModule,
+    ReservaModule,
   ],
   controllers: [],
   providers: [],

@@ -41,19 +41,19 @@ export class TourMySQLRepository implements ITourRepository {
 
     //if (startDate || endDate) {
     //  const dateCondition: any = { fechasExperiencia: {} };
-//
+    //
     //  if (startDate) {
     //    dateCondition.fechasExperiencia.fechaDisponible = MoreThanOrEqual(startDate);
     //  }
-//
+    //
     //  if (endDate) {
     //    dateCondition.fechasExperiencia.fechaDisponible = LessThanOrEqual(endDate);
     //  }
-//
+    //
     //  if (startDate && endDate) {
     //    dateCondition.fechasExperiencia.fechaDisponible = Between(startDate, endDate);
     //  }
-//
+    //
     //  if (whereConditions.length > 0) {
     //    whereConditions.forEach((condition) => Object.assign(condition, dateCondition));
     //  } else {
@@ -61,7 +61,7 @@ export class TourMySQLRepository implements ITourRepository {
     //  }
     //}
 
-    console.log("antes del start_date");
+    console.log('antes del start_date');
     if (startDate || endDate) {
       const dateCondition: any = { fechasExperiencia: {} };
 
@@ -164,33 +164,28 @@ export class TourMySQLRepository implements ITourRepository {
     return this.mapperService.entityToClass(updatedTourEntity, new Tour());
   }
 
-  async findDatesByTourId(
+  async findAvailableDatesByTourId(
     tourId: number,
-  ): Promise<{ fechaDisponible: string; cuposRestantes: number }[]> {
+  ): Promise<{ id: number; fecha: string; cuposRestantes: number }[]> {
     const fechas = await this.fechaExperienciaRepository
       .createQueryBuilder('fe')
-      .leftJoinAndSelect('fe.reservas', 'r') 
+      .innerJoinAndSelect('fe.tour', 't')
+      .leftJoin('fe.reservas', 'r')
       .select([
-        'fe.id AS fecha_id',
-        'fe.fechaDisponible AS fecha_disponible',
-        'fe.cupos AS cupos_totales',
-        'COALESCE(SUM(r.cantidadPersonas), 0) AS cantidad_reservada',
-        '(fe.cupos - COALESCE(SUM(r.cantidadPersonas), 0)) AS cupos_restantes',
+        'fe.id AS id',
+        'fe.fechaDisponible AS fecha',
+        't.slots AS total_slots',
+        'COALESCE(SUM(r.cantidadPersonas), 0) AS total_reservas',
+        '(t.slots - COALESCE(SUM(r.cantidadPersonas), 0)) AS cupos_restantes',
       ])
-      .where('fe.tour_id = :tourId', { tourId })
-      .groupBy('fe.id, fe.fechaDisponible, fe.cupos')
+      .where('t.id = :tourId', { tourId })
+      .groupBy('fe.id, fe.fechaDisponible, t.slots')
+      .having('(t.slots - COALESCE(SUM(r.cantidadPersonas), 0)) > 0')
       .getRawMany();
-
-    return this.mapDatesWithAvailability(fechas);
-  }
-
-  private mapDatesWithAvailability(
-    fechas: any[],
-  ): { fechaDisponible: string; cuposRestantes: number }[] {
-    return fechas.map((fecha) => ({
-      fechaDisponible: fecha.fecha_disponible,
-      cuposRestantes: parseInt(fecha.cupos_restantes, 10),
+    return fechas.map((f) => ({
+      id: f.id,
+      fecha: f.fecha,
+      cuposRestantes: parseInt(f.cupos_restantes, 10),
     }));
   }
-  
 }

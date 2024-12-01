@@ -72,9 +72,9 @@ export class TourService {
     );
   }
 
-  async findDatesByTourId(
+  async findAvailableDatesByTourId(
     tourId: number,
-  ): Promise<{ fechaDisponible: string; cuposRestantes: number }[]> {
-    return this.tourRepository.findDatesByTourId(tourId);
+  ): Promise<{ id: number; fecha: string; cuposRestantes: number }[]> {
+    return this.tourRepository.findAvailableDatesByTourId(tourId);
   }
 }
