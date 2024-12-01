@@ -85,7 +85,7 @@ export class ImagesAttachedsService {
         return Promise.all(files.map(async (file) => {
 
             const processedImage = await sharp(file.buffer)
-            .resize({ width: 1000, height: 1000, fit: 'contain' })
+            // .resize({ width: 1000, height: 1000, fit: 'contain' })
             .toBuffer();
             const uploadedImage = await this.s3Service.uploadImage(
                 processedImage,
