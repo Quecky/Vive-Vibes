@@ -9,13 +9,20 @@ import { TOUR_REPOSITORY } from './application/repository/tour.repository';
 import { TourMySQLRepository } from './infrastructure/persistence/tour.myslq.repository';
 import { CategoryModule } from '../category/category.module';
 import { CharacteristicsModule } from '../characteristics/characteristics.module';
+import { ReservaModule } from '../../modules/reserva/reserva.module';
+import { ReservaEntity } from '@/modules/reserva/infrastructure/persistence/entities/reserva.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TourEntity, FechaExperienciaEntity]),
+    TypeOrmModule.forFeature([
+      TourEntity,
+      FechaExperienciaEntity,
+      ReservaEntity,
+    ]),
     CommonModule,
     CategoryModule,
     CharacteristicsModule,
+    ReservaModule,
   ],
   controllers: [TourController],
   providers: [

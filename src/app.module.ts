@@ -13,7 +13,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CharacteristicsModule } from '@modules/characteristics/characteristics.module';
 import { ImageAttachedModule } from './modules/img/img.module';
-
+import { ReservaModule } from './modules/reserva/reserva.module';
 
 @Module({
   imports: [
@@ -36,8 +36,8 @@ import { ImageAttachedModule } from './modules/img/img.module';
     UserModule,
     AuthModule,
     CharacteristicsModule,
-    ImageAttachedModule
-
+    ImageAttachedModule,
+    ReservaModule,
   ],
   controllers: [],
   providers: [],

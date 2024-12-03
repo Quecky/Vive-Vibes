@@ -25,7 +25,7 @@ export class TourController {
   }
 
   @Get()
-  findAll(@Query() filterTourDto: FilterTourDto) { 
+  findAll(@Query() filterTourDto: FilterTourDto) {
     return this.tourService.findAll(filterTourDto);
   }
 
@@ -52,8 +52,10 @@ export class TourController {
     return this.tourService.deleteCharacteristic(+tourId, +characteristicId);
   }
 
-  @Get(':id/fechas')
-  findDatesByTourId(@Param('id') id: string) {
-    return this.tourService.findDatesByTourId(+id);
+  @Get(':id/fechas-disponibles')
+  async findAvailableDatesByTourId(
+    @Param('id') id: string,
+  ): Promise<{ id: number; fecha: string; cuposRestantes: number }[]> {
+    return await this.tourService.findAvailableDatesByTourId(+id);
   }
 }

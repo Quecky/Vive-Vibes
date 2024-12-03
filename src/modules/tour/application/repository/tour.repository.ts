@@ -12,7 +12,7 @@ export interface ITourRepository {
     tourId: number,
     characteristicId: number,
   ): Promise<Tour>;
-  findDatesByTourId(
+  findAvailableDatesByTourId(
     tourId: number,
-  ): Promise<{ fechaDisponible: string; cuposRestantes: number }[]>;
+  ): Promise<{ id: number; fecha: string; cuposRestantes: number }[]>;
 }
