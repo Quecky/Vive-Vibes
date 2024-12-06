@@ -8,10 +8,18 @@ import { UserEntity } from '@/modules/user/infrastructure/persistence/entities/u
 import { CommonModule } from '@/common/common.module';
 import { RESERVA_REPOSITORY } from './application/repository/reserva.repository';
 import { ReservaMySQLRepository } from './infrastructure/persistence/reserva.mysql.repository';
+import { TOUR_REPOSITORY } from '../tour/application/repository/tour.repository';
+import { TourMySQLRepository } from '../tour/infrastructure/persistence/tour.myslq.repository';
+import { FechaExperienciaEntity } from '../tour/infrastructure/persistence/entities/fechaExperiencia.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ReservaEntity, TourEntity, UserEntity]),
+    TypeOrmModule.forFeature([
+      ReservaEntity,
+      TourEntity,
+      UserEntity,
+      FechaExperienciaEntity,
+    ]),
     CommonModule,
   ],
   controllers: [ReservaController],
@@ -21,7 +29,11 @@ import { ReservaMySQLRepository } from './infrastructure/persistence/reserva.mys
       provide: RESERVA_REPOSITORY,
       useClass: ReservaMySQLRepository,
     },
+    {
+      provide: TOUR_REPOSITORY,
+      useClass: TourMySQLRepository,
+    },
   ],
-  exports: [TypeOrmModule, ReservaService],
+  exports: [TypeOrmModule, ReservaService, TOUR_REPOSITORY],
 })
 export class ReservaModule {}

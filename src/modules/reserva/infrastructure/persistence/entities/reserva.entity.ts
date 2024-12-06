@@ -5,6 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '@/modules/user/infrastructure/persistence/entities/user.entity';
 import { TourEntity } from '@/modules/tour/infrastructure/persistence/entities/tour.entity';
@@ -27,10 +29,10 @@ export class ReservaEntity {
   @Column({ name: 'estado', type: 'varchar', length: 50, default: 'pendiente' })
   estado: string;
 
-  @Column({ name: 'created_at', type: 'datetime' })
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column({ name: 'updated_at', type: 'datetime' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @Column({ name: 'usuario_id', type: 'int' })
