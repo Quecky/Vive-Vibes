@@ -188,4 +188,17 @@ export class TourMySQLRepository implements ITourRepository {
       cuposRestantes: parseInt(f.cupos_restantes, 10),
     }));
   }
+
+  async findFechaExperiencia(
+    tourId: number,
+    fechaExperienciaId: number,
+  ): Promise<FechaExperienciaEntity | null> {
+    return this.fechaExperienciaRepository.findOne({
+      where: {
+        id: fechaExperienciaId,
+        tour: { id: tourId },
+      },
+      relations: ['tour'],
+    });
+  }
 }

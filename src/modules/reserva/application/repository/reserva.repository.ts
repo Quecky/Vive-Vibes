@@ -7,4 +7,6 @@ export interface IReservaRepository {
   create(reserva: Reserva): Promise<Reserva>;
   update(id: number, reserva: Reserva): Promise<Reserva>;
   delete(id: number): Promise<void>;
+  save(reserva: Reserva): Promise<Reserva>;
+  findByFechaExperienciaId(fechaExperienciaId: number): Promise<Reserva[]>;
 }
