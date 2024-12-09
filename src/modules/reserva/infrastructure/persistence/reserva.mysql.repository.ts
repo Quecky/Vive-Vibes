@@ -12,11 +12,11 @@ export class ReservaMySQLRepository implements IReservaRepository {
     private readonly reservaRepository: Repository<ReservaEntity>,
   ) {}
 
-  // Obtener todas las reservas
   async findAll(): Promise<Reserva[]> {
     const reservas = await this.reservaRepository.find({
-      relations: ['tour', 'usuario'],
+      relations: ['tour', 'usuario', 'fechaExperiencia'],
     });
+
     return reservas.map(
       (entity) =>
         new Reserva({
@@ -26,20 +26,22 @@ export class ReservaMySQLRepository implements IReservaRepository {
           fechaReserva: entity.fechaReserva,
           cantidadPersonas: entity.cantidadPersonas,
           estado: entity.estado,
+          precioTotal: entity.precioTotal,
+          fechaExperienciaId: entity.fechaExperiencia?.id,
         }),
     );
   }
 
-  // Obtener una reserva por ID
   async findById(id: number): Promise<Reserva> {
     const reserva = await this.reservaRepository.findOne({
       where: { id },
-      relations: ['tour', 'usuario'],
+      relations: ['tour', 'usuario', 'fechaExperiencia'],
     });
 
     if (!reserva) {
-      throw new NotFoundException(`Reserva with ID ${id} not found`);
+      throw new NotFoundException(`Reserva con ID ${id} no encontrada`);
     }
+
     return new Reserva({
       id: reserva.id,
       tourId: reserva.tour.id,
@@ -47,20 +49,20 @@ export class ReservaMySQLRepository implements IReservaRepository {
       fechaReserva: reserva.fechaReserva,
       cantidadPersonas: reserva.cantidadPersonas,
       estado: reserva.estado,
+      precioTotal: reserva.precioTotal,
+      fechaExperienciaId: reserva.fechaExperiencia?.id,
     });
   }
 
-  // Crear una nueva reserva
   async create(reserva: Reserva): Promise<Reserva> {
-    // Validación de IDs antes de crear la reserva
-    if (!reserva.tourId || !reserva.usuarioId) {
-      throw new NotFoundException('Tour ID or Usuario ID cannot be null');
-    }
-
     const reservaEntity = this.reservaRepository.create({
-      ...reserva,
-      tour: { id: reserva.tourId }, // Asociar ID del tour
-      usuario: { id: reserva.usuarioId }, // Asociar ID del usuario
+      tour: { id: reserva.tourId },
+      usuario: { id: reserva.usuarioId },
+      fechaReserva: reserva.fechaReserva,
+      cantidadPersonas: reserva.cantidadPersonas,
+      estado: reserva.estado,
+      precioTotal: reserva.precioTotal,
+      fechaExperiencia: { id: reserva.fechaExperienciaId },
     });
 
     const savedReserva = await this.reservaRepository.save(reservaEntity);
@@ -72,22 +74,29 @@ export class ReservaMySQLRepository implements IReservaRepository {
       fechaReserva: savedReserva.fechaReserva,
       cantidadPersonas: savedReserva.cantidadPersonas,
       estado: savedReserva.estado,
+      precioTotal: savedReserva.precioTotal,
+      fechaExperienciaId: savedReserva.fechaExperiencia.id,
     });
   }
 
-  // Actualizar una reserva existente
   async update(id: number, reserva: Reserva): Promise<Reserva> {
     const reservaEntity = await this.reservaRepository.findOne({
       where: { id },
+      relations: ['tour', 'fechaExperiencia'],
     });
+
     if (!reservaEntity) {
-      throw new NotFoundException(`Reserva with ID ${id} not found`);
+      throw new NotFoundException(`Reserva con ID ${id} no encontrada`);
     }
 
     Object.assign(reservaEntity, {
-      ...reserva,
-      tour: { id: reserva.tourId }, // Asociar ID del tour
-      usuario: { id: reserva.usuarioId }, // Asociar ID del usuario
+      tour: { id: reserva.tourId },
+      usuario: { id: reserva.usuarioId },
+      fechaReserva: reserva.fechaReserva,
+      cantidadPersonas: reserva.cantidadPersonas,
+      estado: reserva.estado,
+      precioTotal: reserva.precioTotal,
+      fechaExperiencia: { id: reserva.fechaExperienciaId },
     });
 
     const updatedReserva = await this.reservaRepository.save(reservaEntity);
@@ -99,18 +108,68 @@ export class ReservaMySQLRepository implements IReservaRepository {
       fechaReserva: updatedReserva.fechaReserva,
       cantidadPersonas: updatedReserva.cantidadPersonas,
       estado: updatedReserva.estado,
+      precioTotal: updatedReserva.precioTotal,
+      fechaExperienciaId: updatedReserva.fechaExperiencia?.id,
     });
   }
 
-  // Eliminar una reserva por ID
   async delete(id: number): Promise<void> {
     const reservaEntity = await this.reservaRepository.findOne({
       where: { id },
     });
+
     if (!reservaEntity) {
-      throw new NotFoundException(`Reserva with ID ${id} not found`);
+      throw new NotFoundException(`Reserva con ID ${id} no encontrada`);
     }
 
     await this.reservaRepository.delete(id);
+  }
+
+  async save(reserva: Reserva): Promise<Reserva> {
+    const reservaEntity = this.reservaRepository.create({
+      tour: { id: reserva.tourId },
+      usuario: { id: reserva.usuarioId },
+      fechaReserva: reserva.fechaReserva,
+      cantidadPersonas: reserva.cantidadPersonas,
+      estado: reserva.estado,
+      precioTotal: reserva.precioTotal,
+      fechaExperiencia: { id: reserva.fechaExperienciaId },
+    });
+
+    const savedReserva = await this.reservaRepository.save(reservaEntity);
+
+    return new Reserva({
+      id: savedReserva.id,
+      tourId: savedReserva.tour.id,
+      usuarioId: savedReserva.usuario.id,
+      fechaReserva: savedReserva.fechaReserva,
+      cantidadPersonas: savedReserva.cantidadPersonas,
+      estado: savedReserva.estado,
+      precioTotal: savedReserva.precioTotal,
+      fechaExperienciaId: savedReserva.fechaExperiencia?.id,
+    });
+  }
+
+  async findByFechaExperienciaId(
+    fechaExperienciaId: number,
+  ): Promise<Reserva[]> {
+    const reservas = await this.reservaRepository.find({
+      where: { fechaExperiencia: { id: fechaExperienciaId } },
+      relations: ['tour', 'usuario', 'fechaExperiencia'], // Incluye relaciones necesarias
+    });
+
+    return reservas.map(
+      (entity) =>
+        new Reserva({
+          id: entity.id,
+          tourId: entity.tour.id,
+          usuarioId: entity.usuario.id,
+          fechaReserva: entity.fechaReserva,
+          cantidadPersonas: entity.cantidadPersonas,
+          estado: entity.estado,
+          precioTotal: entity.precioTotal,
+          fechaExperienciaId: entity.fechaExperiencia?.id,
+        }),
+    );
   }
 }

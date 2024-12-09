@@ -11,15 +11,15 @@ import { ReservaService } from '../application/service/reserva.service';
 import { CreateReservaDto } from '../application/dto/create-reserva.dto';
 import { UpdateReservaDto } from '../application/dto/update-reserva.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Reserva } from '../domain/reserva.domain';
 
 @ApiTags('Reserva')
 @Controller('reserva')
 export class ReservaController {
   constructor(private readonly reservaService: ReservaService) {}
-
   @Post()
-  create(@Body() createReservaDto: CreateReservaDto) {
-    return this.reservaService.create(createReservaDto);
+  async create(@Body() createReservaDto: CreateReservaDto): Promise<Reserva> {
+    return this.reservaService.createReserva(createReservaDto);
   }
 
   @Get()
