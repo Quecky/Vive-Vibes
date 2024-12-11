@@ -42,8 +42,9 @@ export class CreateTourDto {
   suitableForChildren: boolean;
 
   @ApiProperty()
-  @IsDateString()
-  experienceDate: Date;
+  @IsArray()
+  @IsDateString({}, { each: true })
+  experienceDates: Date[];
 
   @ApiProperty()
   @IsDateString()

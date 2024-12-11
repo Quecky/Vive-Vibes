@@ -1,6 +1,7 @@
 import { Category } from '@/modules/category/domain/category.domain';
 import { Characteristic } from '@/modules/characteristics/domain/characteristic.domain';
 import { Base } from 'src/common/domain/base.domain';
+import { FechaExperienciaEntity } from '../infrastructure/persistence/entities/fechaExperiencia.entity';
 
 export class Tour extends Base {
   name: string;
@@ -11,7 +12,7 @@ export class Tour extends Base {
   country: string;
   city: string;
   suitableForChildren: boolean;
-  experienceDate: Date;
+  // experienceDates: Date[];
   startTime: string;
   endTime: string;
   price: number;
@@ -20,4 +21,5 @@ export class Tour extends Base {
   categoryId: number;
   category: Category;
   characteristics: Characteristic[];
+  fechasExperiencia: FechaExperienciaEntity[];
 }

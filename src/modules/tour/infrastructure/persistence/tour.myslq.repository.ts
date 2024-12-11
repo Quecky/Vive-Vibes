@@ -115,6 +115,20 @@ export class TourMySQLRepository implements ITourRepository {
     const tourEntity = this.mapperService.classToEntity(tour, new TourEntity());
 
     const createTourEntity = await this.tourRepository.save(tourEntity);
+
+    // Crear las fechas
+    if (tour.fechasExperiencia && tour.fechasExperiencia.length > 0) {
+      const fechasExperiencia = tour.fechasExperiencia.map((fecha) => {
+        const fechaEntity = new FechaExperienciaEntity();
+        fechaEntity.fechaDisponible = fecha.fechaDisponible;
+        fechaEntity.cupos = fecha.cupos;
+        fechaEntity.tour = createTourEntity;
+        return fechaEntity;
+      });
+
+      await this.fechaExperienciaRepository.save(fechasExperiencia);
+    }
+
     return this.mapperService.entityToClass(createTourEntity, new Tour());
   }
   async update(id: number, newTour: Tour): Promise<Tour> {
