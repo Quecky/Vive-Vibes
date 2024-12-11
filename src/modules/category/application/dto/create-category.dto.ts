@@ -5,4 +5,12 @@ export class CreateCategoryDto {
   @ApiProperty()
   @IsString()
   name: string;
+  
+  @ApiProperty()
+  @IsString()
+  description: string;
+
+  @ApiProperty()
+  @IsString()
+  image: string;
 }

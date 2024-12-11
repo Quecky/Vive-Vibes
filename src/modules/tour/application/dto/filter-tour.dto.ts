@@ -20,5 +20,9 @@ export class FilterTourDto {
   @IsString()
   endDate?: string;
 
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  category?: string;
 
 }

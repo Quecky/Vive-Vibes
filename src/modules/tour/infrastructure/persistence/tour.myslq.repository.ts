@@ -28,7 +28,7 @@ export class TourMySQLRepository implements ITourRepository {
   ) {}
 
   async findAll(filters: FilterTourDto): Promise<Tour[]> {
-    const { search, startDate, endDate } = filters;
+    const { search, startDate, endDate, category } = filters;
 
     const whereConditions: any[] = [];
 
@@ -84,6 +84,12 @@ export class TourMySQLRepository implements ITourRepository {
       } else {
         whereConditions.push(dateCondition);
       }
+    }
+
+    if (category) {
+      whereConditions.push(
+        { categoryId: Like(`%${filters.category}%`) },
+      );
     }
 
     const tourEntities = await this.tourRepository.find({

@@ -6,8 +6,14 @@ export class CategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
+
+  @Column({ length: 2000 })
+  description: string;
+  
+  @Column()
+  image: string;
 
   @OneToMany(() => TourEntity, (tour) => tour.category)
   tours?: TourEntity[];
