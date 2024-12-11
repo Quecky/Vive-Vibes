@@ -12,6 +12,7 @@ import { Characteristic } from '@/modules/characteristics/domain/characteristic.
 import { CharacteristicsService } from '@/modules/characteristics/application/service/characteristics.service';
 import { In } from 'typeorm';
 import { FilterTourDto } from '../dto/filter-tour.dto';
+import { FechaExperienciaEntity } from '../../infrastructure/persistence/entities/fechaExperiencia.entity';
 
 @Injectable()
 export class TourService {
@@ -30,7 +31,17 @@ export class TourService {
       createTourDto,
       new Tour(),
     );
-    newTour.category = category;
+    newTour.category = category;    
+    if (createTourDto.experienceDates) {
+      newTour.fechasExperiencia = createTourDto.experienceDates.map((date) => {
+        const fechaEntity = new FechaExperienciaEntity();
+
+        fechaEntity.fechaDisponible = date.toString().split('T')[0];
+        fechaEntity.cupos = createTourDto.slots; // Usar slots del DTO
+        return fechaEntity;
+      });
+    }
+
     const response = await this.tourRepository.create(newTour);
     return response;
   }
